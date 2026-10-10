@@ -1,8 +1,14 @@
+// quiz.js: the symbol quiz.
+// Picks up to 5 unlocked symbols, asks which symbol matches each meaning,
+// marks answers right or wrong, and saves the score.
+
 let quizSymbols = [];
 let questions = [];
 let current = 0;
 let score = 0;
 let answered = false;
+// drawSteps: draws the progress bar at the top (one segment per question)
+
 
 function drawSteps() {
     let html = "";
@@ -12,6 +18,7 @@ function drawSteps() {
     }
     document.getElementById("steps").innerHTML = html;
 }
+// showQuestion: shows a meaning and 4 symbol choices (the right one plus 3 random wrong ones)
 
 function showQuestion() {
     answered = false;
@@ -50,6 +57,7 @@ function showQuestion() {
     }
     drawSteps();
 }
+// checkAnswer: marks the choice green or red and shows the correct answer if wrong
 
 function checkAnswer(btn, opt, q) {
     if (answered) {
@@ -78,6 +86,7 @@ function checkAnswer(btn, opt, q) {
     document.getElementById("nextBtn").style.visibility = "visible";
     drawSteps();
 }
+// finishQuiz: saves the score and shows the result screen
 
 function finishQuiz() {
     // save the score to the player's progress
@@ -98,6 +107,7 @@ function finishQuiz() {
     document.getElementById("resultScore").textContent = score + "/" + questions.length;
     document.getElementById("resultTitle").textContent = title;
 }
+// startQuiz: picks new questions and starts from question 1
 
 function startQuiz() {
     current = 0;
@@ -107,7 +117,7 @@ function startQuiz() {
     document.getElementById("resultArea").style.display = "none";
     showQuestion();
 }
-
+// setupQuiz: runs once when quiz.html opens
 // called once when quiz.html loads
 function setupQuiz() {
     let user = requireLogin();

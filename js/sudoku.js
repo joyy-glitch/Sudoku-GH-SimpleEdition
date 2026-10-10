@@ -1,3 +1,7 @@
+// sudoku.js: the game itself.
+// Makes a puzzle with one solution, draws the board and symbol buttons, handles moves,
+// mistakes, score, undo, hints and the timer, and saves the result when the puzzle is solved.
+
 // game settings, set when a new puzzle starts
 let size = 4;
 let level = 1;
@@ -35,6 +39,32 @@ let removeCounts = {
 
 // bigger grids allow more mistakes
 let mistakeLimits = { 4: 3, 6: 4, 9: 5 };
+
+//Different functions and uses
+// makeEmpty / copyGrid: create a blank grid, or a copy of one
+// canPlace: checks if a symbol can go in a square (not already in its row, column or box)
+// fillGrid: fills a full grid using backtracking (try a symbol, undo it if it leads to a dead end)
+// countSolutions: counts how many ways a puzzle can be solved, stopping once it finds 2
+// makePuzzle: makes a full grid, then removes squares one by one as long as there is still only 1 solution
+// sameBox: checks if two squares are in the same box
+// drawBoard: draws the grid, with highlights for the selected square, matching symbols and mistakes
+// countPlaced: how many of one symbol are correctly placed
+// drawPalette: draws the symbol buttons and fades out symbols that are fully placed
+// drawInfo: shows the meaning of the symbol in the selected square
+// drawStatus: updates the score, mistakes, hint count and numbers on/off
+// drawAll: redraws everything after a change
+// placeSymbol: puts a symbol (or 0 to erase) in the selected square and updates the score and mistakes
+// undoMove: takes back the last move (mistakes still count)
+// useHint: fills the selected square with the right symbol, once per puzzle
+// checkWin: checks if every square is correct, adds bonus points and saves the game
+// gameOver: ends the game when the player runs out of mistakes
+// saveGame: saves the finished game, checks for new unlocks and shows the right message
+// showEnd: shows the pop-up at the end of a game
+// formatTime / startTimer: show and run the mm:ss timer
+// startGame: sets up a new puzzle for the chosen level and difficulty
+// fillLevelSelect: only lists the levels the player has unlocked
+// newPuzzle: starts a new game with the level and difficulty chosen in the menu
+// setupPage: runs once when play.html opens, connecting the buttons and starting the first game
 
 // ---------- making the puzzle ----------
 

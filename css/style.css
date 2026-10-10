@@ -1,6 +1,18 @@
+/* AdinKraze styles
+   - Colours are stored as variables in :root (dark mode) and html.light (light mode),
+     so switching themes only means adding or removing one class.
+   - Sections: basics, sidebar and layout, cards and buttons, symbol images,
+     home, play, symbols, quiz, rules, phone layout, and login/sign up.
+   - Symbol images are black PNGs used as masks, so CSS can paint them any colour. */
+
+
+
+
 /* ========== Colours ==========
    Dark mode is the default. Light mode is turned on by
    adding the class "light" to the <html> tag (see js/app.js). */
+
+
 
 :root {
     --bg: #0F0A1F;

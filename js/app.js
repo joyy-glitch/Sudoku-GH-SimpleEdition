@@ -1,5 +1,9 @@
 // All the Adinkra symbols in the game.
 // level tells us when the symbol unlocks.
+
+// app.js: shared code loaded on every page.
+// Holds the list of symbols, light/dark mode, the menu, saving and loading players
+// from localStorage, and helpers for working out the player's level and streak.
 let symbols = [
     { name: "Gye Nyame", meaning: "Except God - the supremacy of God", image: "gye_nyame.png", level: 1 },
     { name: "Sankofa", meaning: "Go back and get it - learning from the past", image: "sankofa.png", level: 1 },
@@ -21,6 +25,9 @@ let gridSizes = { 1: 4, 2: 6, 3: 9 };
 if (localStorage.getItem("theme") == "light") {
     document.documentElement.classList.add("light");
 }
+
+// toggleTheme: switches between light and dark mode and remembers the choice
+
 
 function toggleTheme() {
     let html = document.documentElement;
@@ -44,6 +51,9 @@ testImage.src = "images/symbols/" + symbols[0].image;
 
 // returns the html for one symbol picture
 // (the black PNG is used as a mask, so CSS can paint it gold, purple or red)
+
+// symbolHtml: returns the HTML for one symbol picture (the image is used as a mask so it can be recoloured)
+
 function symbolHtml(s) {
     let url = "url(images/symbols/" + s.image + ")";
     return '<span class="sym" title="' + s.name + '">' +
@@ -73,6 +83,9 @@ let icons = {
 
 // draws the sidebar (desktop) and the tab bar (phone).
 // active is the page we are on, e.g. "play"
+
+// drawNav: builds the sidebar (desktop) and bottom tab bar (phone), highlighting the current page
+
 function drawNav(active) {
     let pages = [
         { id: "home", label: "Home", href: "dashboard.html" },
@@ -105,6 +118,7 @@ function drawNav(active) {
 }
 
 // ---------- saving and loading users ----------
+// getUsers / saveUsers: read and write the list of all players in localStorage
 
 function getUsers() {
     let users = localStorage.getItem("users");
@@ -114,10 +128,11 @@ function getUsers() {
     return JSON.parse(users);
 }
 
+
 function saveUsers(users) {
     localStorage.setItem("users", JSON.stringify(users));
 }
-
+// getCurrentUser: finds the player who is logged in right now
 function getCurrentUser() {
     let username = localStorage.getItem("currentUser");
     if (username == null) {
@@ -131,6 +146,8 @@ function getCurrentUser() {
     }
     return null;
 }
+// updateUser: saves changes to one player (e.g. after a game or quiz)
+
 
 function updateUser(user) {
     let users = getUsers();
@@ -143,6 +160,7 @@ function updateUser(user) {
 }
 
 // send people who are not logged in to the login page
+// requireLogin: sends anyone who isn't logged in to the login page
 function requireLogin() {
     let user = getCurrentUser();
     if (user == null) {
@@ -151,6 +169,7 @@ function requireLogin() {
     }
     return user;
 }
+// logout: forgets who is logged in and goes back to the login page
 
 function logout() {
     localStorage.removeItem("currentUser");
@@ -160,6 +179,8 @@ function logout() {
 // ---------- progress ----------
 
 // the player's level is one more than the highest level they have finished
+// getCurrentLevel: the player's level is one more than the highest level they have finished
+
 function getCurrentLevel(user) {
     let maxLevel = 0;
     for (let g of user.games) {
@@ -169,6 +190,7 @@ function getCurrentLevel(user) {
     }
     return maxLevel + 1;
 }
+// getUnlockedSymbols: the symbols the player can use, based on their level
 
 function getUnlockedSymbols(user) {
     let level = getCurrentLevel(user);
@@ -176,6 +198,8 @@ function getUnlockedSymbols(user) {
 }
 
 // how many days in a row the player has solved a puzzle (ending today)
+// getStreak: counts how many days in a row the player has solved a puzzle
+// shuffle: mixes up an array into a random order
 function getStreak(user) {
     let days = user.games.map(g => g.date.slice(0, 10));
     let count = 0;
