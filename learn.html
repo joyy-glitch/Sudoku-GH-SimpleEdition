@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Symbols - AdinKraze</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Figtree:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/app.js"></script>
+</head>
+<body>
+    <div class="app">
+        <nav class="sidebar" id="sidebar"></nav>
+
+        <main class="main">
+            <div class="halo"></div>
+
+            <div class="topbar">
+                <div>
+                    <h1>Your symbols</h1>
+                    <div class="muted" style="margin-top: 6px">Tap a card to read what the symbol means.</div>
+                </div>
+                <div class="topbar-right">
+                    <div style="min-width: 220px">
+                        <div style="display: flex; justify-content: space-between; font-size: 14px; font-weight: 700">
+                            <span class="muted" id="collectText"></span>
+                        </div>
+                        <div class="collect-bar" id="collectBar" style="margin-top: 8px"></div>
+                    </div>
+                    <button class="icon-btn press" onclick="toggleTheme()" aria-label="Switch light or dark mode">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg>
+                    </button>
+                </div>
+            </div>
+
+            <div class="filters" id="filters"></div>
+            <div class="symbol-grid" id="symbolGrid"></div>
+        </main>
+    </div>
+
+    <nav class="tabbar" id="tabbar"></nav>
+
+    <script>
+        let user = requireLogin();
+        drawNav("symbols");
+
+        let level = getCurrentLevel(user);
+        let unlocked = getUnlockedSymbols(user);
+        let filter = 0;      // 0 means all levels
+        let openCard = -1;   // which card is flipped
+
+        // progress bar at the top
+        let colours = ["c1", "c2", "c3"];
+        let bar = "";
+        for (let i = 0; i < symbols.length; i++) {
+            bar += (i < unlocked.length) ? '<div class="' + colours[i % 3] + '"></div>' : "<div></div>";
+        }
+        document.getElementById("collectBar").innerHTML = bar;
+        document.getElementById("collectText").textContent = unlocked.length + " of " + symbols.length + " collected";
+
+        function drawFilters() {
+            let names = ["All", "Level 1", "Level 2", "Level 3"];
+            let box = document.getElementById("filters");
+            box.innerHTML = "";
+            for (let i = 0; i < names.length; i++) {
+                let btn = document.createElement("button");
+                btn.className = (i == filter) ? "filter on" : "filter";
+                btn.textContent = names[i];
+                btn.onclick = function () {
+                    filter = i;
+                    drawFilters();
+                    drawCards();
+                };
+                box.appendChild(btn);
+            }
+        }
+
+        function drawCards() {
+            let grid = document.getElementById("symbolGrid");
+            grid.innerHTML = "";
+
+            for (let i = 0; i < symbols.length; i++) {
+                let s = symbols[i];
+                if (filter != 0 && s.level != filter) {
+                    continue;
+                }
+
+                let card = document.createElement("button");
+                let isUnlocked = s.level <= level;
+
+                if (!isUnlocked) {
+                    card.className = "sym-card locked";
+                    card.innerHTML = '<div class="label">Level ' + s.level + '</div>' +
+                        '<div class="lock">' + icons.lock + '</div>' +
+                        '<h3 class="muted">Locked</h3>' +
+                        '<div class="small">Finish level ' + (s.level - 1) + ' to unlock</div>';
+                } else if (i == openCard) {
+                    card.className = "sym-card flipped press";
+                    card.innerHTML = '<div class="label">Level ' + s.level + '</div>' +
+                        '<h3>' + s.name + '</h3>' +
+                        '<p>' + s.meaning + '</p>' +
+                        '<div class="small" style="margin-top: auto; color: #DDD0FF">Tap to flip back</div>';
+                } else {
+                    card.className = "sym-card press";
+                    let isNew = s.level == level && level > 1;  // the symbols from the level just unlocked
+                    card.innerHTML = '<div class="label">Level ' + s.level + '</div>' +
+                        (isNew ? '<span class="new-tag">New</span>' : '') +
+                        '<div class="pedestal">' + symbolHtml(s) + '</div>' +
+                        '<h3>' + s.name + '</h3>' +
+                        '<div class="small">Tap to read its meaning</div>';
+                }
+
+                if (isUnlocked) {
+                    card.onclick = function () {
+                        openCard = (openCard == i) ? -1 : i;
+                        drawCards();
+                    };
+                }
+                grid.appendChild(card);
+            }
+        }
+
+        drawFilters();
+        drawCards();
+    </script>
+</body>
+</html>

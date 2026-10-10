@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Sign Up - AdinKraze</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Figtree:wght@400;500;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/app.js"></script>
+</head>
+
+<body>
+    <!-- two halves: purple showcase on the left, form on the right -->
+    <div class="split">
+
+        <!-- left half: purple showcase with floating symbols -->
+        <section class="showcase">
+
+            <!-- kente stripe along the top edge -->
+            <div class="kente gold">
+                <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+            </div>
+
+            <!-- floating symbols: each class (f1 to f12) sets its image, size, position and speed in style.css -->
+            <span class="floater f1"><span></span></span>
+            <span class="floater f2"><span></span></span>
+            <span class="floater f3"><span></span></span>
+            <span class="floater f4"><span></span></span>
+            <span class="floater f5"><span></span></span>
+            <span class="floater f6"><span></span></span>
+            <span class="floater f7"><span></span></span>
+            <span class="floater f8"><span></span></span>
+            <span class="floater f9"><span></span></span>
+            <span class="floater f10"><span></span></span>
+            <span class="floater f11"><span></span></span>
+            <span class="floater f12"><span></span></span>
+
+            <!-- headline and short description -->
+            <h2>Play sudoku.<br><span>Learn Adinkra.</span></h2>
+            <p>Every square is a symbol with a story. Solve puzzles, collect symbols and learn what they mean.</p>
+
+            <!-- quick facts about the game -->
+            <div class="pills">
+                <span>9 symbols to collect</span>
+                <span>3 levels · 4×4 to 9×9</span>
+                <span>Quizzes after every puzzle</span>
+            </div>
+        </section>
+
+        <!-- right half: the sign up form -->
+        <section class="form-side">
+
+            <!-- logo and light/dark button -->
+            <div class="form-top">
+                <a class="logo" href="index.html">Adin<span>Kraze</span></a>
+                <button class="icon-btn press" onclick="toggleTheme()" aria-label="Switch light or dark mode">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z" />
+                    </svg>
+                </button>
+            </div>
+
+            <div class="form-wrap">
+                <div class="form-box">
+                    <h1>Create an account</h1>
+                    <p class="muted" style="margin: 8px 0 0">Akwaaba! Start collecting symbols.</p>
+                    <p class="message" id="message"></p>
+
+                    <form id="registerForm">
+                        <label for="name">Full name</label>
+                        <input type="text" id="name">
+
+                        <label for="username">Username</label>
+                        <input type="text" id="username">
+
+                        <label for="password">Password</label>
+                        <input type="password" id="password">
+
+                        <button type="submit" class="btn btn-primary press">Sign up</button>
+                    </form>
+
+                    <p class="switch">Already have an account? <a href="login.html">Log in</a></p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        document.getElementById("registerForm").onsubmit = function (e) {
+            e.preventDefault(); // stop the form reloading the page
+
+            let name = document.getElementById("name").value.trim();
+            let username = document.getElementById("username").value.trim();
+            let password = document.getElementById("password").value;
+            let message = document.getElementById("message");
+
+            // check the form is filled in properly
+            if (name == "" || username == "" || password == "") {
+                message.textContent = "Please fill in all fields.";
+                return;
+            }
+            if (password.length < 6) {
+                message.textContent = "Password must be at least 6 characters.";
+                return;
+            }
+
+            // make sure nobody else has this username
+            let users = getUsers();
+            for (let u of users) {
+                if (u.username == username) {
+                    message.textContent = "That username is already taken.";
+                    return;
+                }
+            }
+
+            // save the new player
+            users.push({
+                name: name,
+                username: username,
+                password: password,
+                games: [],
+                quizzes: []
+            });
+            saveUsers(users);
+
+            // log the new player in straight away
+            localStorage.setItem("currentUser", username);
+            window.location.href = "dashboard.html";
+        };
+    </script>
+</body>
+
+</html>

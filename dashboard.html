@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Home - AdinKraze</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Figtree:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/app.js"></script>
+</head>
+<body>
+    <div class="app">
+        <nav class="sidebar" id="sidebar"></nav>
+
+        <main class="main">
+            <div class="halo"></div>
+
+            <div class="topbar">
+                <div>
+                    <div class="muted" style="font-weight: 700">Akwaaba!</div>
+                    <h1 id="welcome"></h1>
+                </div>
+                <div class="topbar-right">
+                    <span class="chip flame" id="streak"></span>
+                    <button class="icon-btn press" onclick="toggleTheme()" aria-label="Switch light or dark mode">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg>
+                    </button>
+                </div>
+            </div>
+
+            <div class="home-grid">
+                <div class="home-left">
+                    <div class="promo-row">
+                        <a class="promo purple press" href="learn.html">
+                            <div class="pedestal" id="dailySymbol"></div>
+                            <div class="label">Today's symbol</div>
+                            <h3 id="dailyName"></h3>
+                            <div class="small" id="dailyMeaning"></div>
+                            <span class="pill">Learn</span>
+                        </a>
+
+                        <a class="promo gold press" href="play.html">
+                            <div class="kente"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+                            <div class="promo-icon">
+                                <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#2A1405" stroke-width="2" stroke-linecap="round"><rect x="6" y="11" width="12" height="9" rx="2"/><path d="M9 11V8a3 3 0 0 1 6 0v3"/></svg>
+                            </div>
+                            <div class="label">Next unlock</div>
+                            <h3 id="nextTitle"></h3>
+                            <div class="small" id="nextText"></div>
+                            <span class="pill">Go</span>
+                        </a>
+
+                        <a class="promo green press" href="quiz.html">
+                            <div class="promo-icon">
+                                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.6.4 1 1.1 1 1.8V16h5v-.3c0-.7.4-1.4 1-1.8A6 6 0 0 0 12 3z"/></svg>
+                            </div>
+                            <div class="label">Quiz challenge</div>
+                            <h3>Name the symbols</h3>
+                            <div class="small" id="quizText"></div>
+                            <span class="pill">Start</span>
+                        </a>
+                    </div>
+
+                    <div class="card">
+                        <div style="display: flex; justify-content: space-between; align-items: baseline">
+                            <b style="font-size: 17px">Symbols collected</b>
+                            <a href="learn.html" style="font-weight: 700; font-size: 14px; text-decoration: none">View all</a>
+                        </div>
+                        <div class="collect-bar" id="collectBar"></div>
+                        <div class="muted" style="display: flex; justify-content: space-between; margin-top: 10px; font-size: 14px">
+                            <span id="collectText"></span>
+                            <span id="collectHint"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="home-right">
+                    <div class="card best">
+                        <div class="muted">All-time best score</div>
+                        <div class="best-number">
+                            <svg width="34" height="34" viewBox="0 0 24 24" fill="#F5B83D"><path d="M7 3h10v2h3v3a4 4 0 0 1-4 4h-.4A5 5 0 0 1 13 14.9V18h3v3H8v-3h3v-3.1A5 5 0 0 1 8.4 12H8a4 4 0 0 1-4-4V5h3V3z"/></svg>
+                            <span id="bestScore">0</span>
+                        </div>
+                        <div class="mini-stats">
+                            <div><b id="solvedCount">0</b><span>Puzzles solved</span></div>
+                            <div><b id="quizAverage">-</b><span>Quiz average</span></div>
+                        </div>
+                    </div>
+
+                    <a class="btn btn-primary btn-big press" href="play.html">
+                        <span id="playTitle">Play</span>
+                        <small id="playSub"></small>
+                    </a>
+                    <a class="btn btn-outline btn-big press" href="quiz.html">Take the quiz</a>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <nav class="tabbar" id="tabbar"></nav>
+
+    <script>
+        let user = requireLogin();
+        drawNav("home");
+
+        let level = getCurrentLevel(user);
+        let unlocked = getUnlockedSymbols(user);
+
+        document.getElementById("welcome").textContent = user.name;
+        let streak = getStreak(user);
+        if (streak == 0) {
+            document.getElementById("streak").innerHTML = icons.flame + "Solve one today";
+        } else {
+            document.getElementById("streak").innerHTML = icons.flame + streak + "-day streak";
+        }
+
+        // a different unlocked symbol each day
+        let dayNumber = Math.floor(Date.now() / 86400000);
+        let daily = unlocked[dayNumber % unlocked.length];
+        document.getElementById("dailySymbol").innerHTML = symbolHtml(daily);
+        document.getElementById("dailyName").textContent = daily.name;
+        document.getElementById("dailyMeaning").textContent = daily.meaning.split(" - ")[0];
+
+        // next level card
+        if (level <= 3) {
+            let newCount = symbols.filter(s => s.level == level).length;
+            document.getElementById("nextTitle").textContent = "Level " + level + " · " + gridSizes[level] + "×" + gridSizes[level];
+            if (level == 1) {
+                document.getElementById("nextText").textContent = "Solve your first puzzle";
+            } else {
+                document.getElementById("nextText").textContent = newCount + " new symbols to play with";
+            }
+        } else {
+            document.getElementById("nextTitle").textContent = "All unlocked";
+            document.getElementById("nextText").textContent = "Try Hard on the 9×9";
+        }
+
+        // quiz card and average
+        if (user.quizzes.length == 0) {
+            document.getElementById("quizText").textContent = "No quizzes yet";
+        } else {
+            let last = user.quizzes[user.quizzes.length - 1];
+            document.getElementById("quizText").textContent = "Last score " + last.score + "/" + last.total;
+
+            let right = 0;
+            let total = 0;
+            for (let q of user.quizzes) {
+                right += q.score;
+                total += q.total;
+            }
+            document.getElementById("quizAverage").textContent = Math.round(right / total * 100) + "%";
+        }
+
+        // symbols collected bar
+        let colours = ["c1", "c2", "c3"];
+        let bar = "";
+        for (let i = 0; i < symbols.length; i++) {
+            if (i < unlocked.length) {
+                bar += '<div class="' + colours[i % 3] + '"></div>';
+            } else {
+                bar += "<div></div>";
+            }
+        }
+        document.getElementById("collectBar").innerHTML = bar;
+        document.getElementById("collectText").textContent = unlocked.length + " of " + symbols.length + " unlocked";
+        document.getElementById("collectHint").textContent = level < 3 ? "Finish level " + level + " for more" : "";
+
+        // best score and puzzles solved
+        let best = 0;
+        for (let g of user.games) {
+            if (g.score > best) {
+                best = g.score;
+            }
+        }
+        document.getElementById("bestScore").textContent = best;
+        document.getElementById("solvedCount").textContent = user.games.length;
+
+        // play button
+        let playLevel = Math.min(level, 3);
+        document.getElementById("playTitle").textContent = "Play level " + playLevel;
+        document.getElementById("playSub").textContent = gridSizes[playLevel] + "×" + gridSizes[playLevel] + " grid";
+    </script>
+</body>
+</html>

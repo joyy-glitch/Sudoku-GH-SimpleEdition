@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Rules - AdinKraze</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Figtree:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/app.js"></script>
+</head>
+<body>
+    <div class="app">
+        <nav class="sidebar" id="sidebar"></nav>
+
+        <main class="main">
+            <div class="halo"></div>
+
+            <div class="topbar">
+                <h1>How to play</h1>
+                <div class="topbar-right">
+                    <button class="icon-btn press" onclick="toggleTheme()" aria-label="Switch light or dark mode">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg>
+                    </button>
+                </div>
+            </div>
+
+            <div class="rules">
+                <div class="card">
+                    <h3>The goal</h3>
+                    <p>Fill every empty square with an Adinkra symbol. Each <b>row</b>, each <b>column</b> and each <b>box</b> (the areas inside the thick lines) must have every symbol exactly once.</p>
+                </div>
+
+                <div class="card">
+                    <h3>Placing a symbol</h3>
+                    <p>Tap a square on the board first, then tap a symbol. The square's row, column and box light up so you can see what's already there.</p>
+                    <p>Tap any symbol on the board to read <b>what it means</b> in the purple card.</p>
+                    <p>When a symbol has been placed everywhere it belongs, its button fades out.</p>
+                </div>
+
+                <div class="card">
+                    <h3>Tools</h3>
+                    <p><b>Undo</b> takes back your last move. It doesn't take back a mistake.</p>
+                    <p><b>Erase</b> clears the selected square.</p>
+                    <p><b>Numbers</b> shows a number in the corner of each symbol, for a classic sudoku feel.</p>
+                    <p><b>Hint</b> fills the selected square with the right symbol. You get one per puzzle.</p>
+                </div>
+
+                <div class="card">
+                    <h3>Mistakes</h3>
+                    <p>A wrong symbol turns red and counts as a mistake.</p>
+                    <p>Level 1 (4×4): <b>3 mistakes</b> · Level 2 (6×6): <b>4 mistakes</b> · Level 3 (9×9): <b>5 mistakes</b></p>
+                    <p>Run out and the game ends. Start a new puzzle to try again.</p>
+                </div>
+
+                <div class="card">
+                    <h3>Scoring</h3>
+                    <p><b>+10</b> for each square you fill correctly</p>
+                    <p><b>−5</b> for each mistake</p>
+                    <p><b>+20</b> bonus for every mistake you had left when you finish</p>
+                </div>
+
+                <div class="card">
+                    <h3>Levels and symbols</h3>
+                    <p>Finish a level to unlock the next grid and its new symbols. Visit <b>Symbols</b> to learn their meanings, then test yourself with the <b>Quiz</b>.</p>
+                    <p><b>Easy, Medium and Hard</b> change how many squares start empty.</p>
+                    <p>Use the moon button to switch between <b>dark and light mode</b>.</p>
+                </div>
+
+                <a class="btn btn-primary press" href="play.html" style="align-self: flex-start">Start playing</a>
+            </div>
+        </main>
+    </div>
+
+    <nav class="tabbar" id="tabbar"></nav>
+
+    <script>
+        drawNav("rules");
+    </script>
+</body>
+</html>
