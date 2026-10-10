@@ -1,5 +1,5 @@
-# Sudoku-GH-SimpleEdition(HTML, CSS and JS version)
-A sudoku game that teaches Ghanaian Adinkra symbols and their meanings. Every square is a symbol instead of a number.
+# AdinKraze - Sudoku-GH-SimpleEdition(HTML, CSS and JS version)
+A sudoku game called AdinKraze that teaches Ghanaian Adinkra symbols and their meanings. Every square is a symbol instead of a number.
 # Features
 Sign up and log in (saved in the browser with localStorage)
 3 levels: 4×4, 6×6 and 9×9, each unlocking new symbols
