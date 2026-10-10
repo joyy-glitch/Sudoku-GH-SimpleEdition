@@ -403,14 +403,14 @@ function saveGame() {
     let text = "Solved in " + formatTime(seconds) + " with " + score + " points.";
     let title = "Ayekoo!";
 
-    if (getCurrentLevel(user) > oldLevel && oldLevel < 3) {
-        // finished level 1 or 2 for the first time
-        text += " New level and symbols unlocked!";
-        fillLevelSelect();
-    } else if (getCurrentLevel(user) > oldLevel && oldLevel == 3) {
+    if (getCurrentLevel(user) > 3 && oldLevel <= 3) {
         // finished level 3 for the first time: every symbol is collected
         title = "Ayekoo, master!";
         text += " You've mastered all 9 Adinkra symbols! But the story isn't over: new symbols and a bigger challenge are on the way. Keep your streak alive so you're ready.";
+    } else if (getCurrentLevel(user) > oldLevel) {
+        // finished level 1 or 2 for the first time
+        text += " New level and symbols unlocked!";
+        fillLevelSelect();
     }
     showEnd(title, text, "Take the symbol quiz", "quiz.html");
 }
